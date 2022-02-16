@@ -1,0 +1,43 @@
+PRATICA 02 -  GET METADATA + FOR EACH + COPY DATA + STORED PROCEDURE
+
+1 - CRIAR UM PIPELINE PARA REALIZAR OS SEGUINTES PASSOS:
+1.1 - LER OS ARQUIVOS PARQUET COM O GET METADATA - ok
+1.2 - PASSAR OS ITENS LISTADOS PARA O FOR EACH - ok
+1.3 - COPIAR OS DADOS DOS ARQUIVOS PARQUET PARA UMA TABELA NO AZURE SQL - ok
+DATABASE UTILIZANDO O COPY DATA
+1.4 - ANALISAR OS DADOS DENTRO DAS TABELAS - ok
+1.5 - RE-EXECUTAR O PIPELINE PARA GERAR DADOS DUPLICADOS
+2 - CRIAR DUAS STORED PROCEDURES NO AZURE SQL PARA REMOVER AS LINHAS DUPLICADAS DAS NOVAS TABELAS
+3 - REALIZAR A CHAMADA DAS STORED PROCEDURES NO PIPELINE
+
+remoção do parquet no for each: @replace(item().name, '.parquet', '')
+
+selecionar auto create table no pipeline do parquet_to_sql
+
+create procedure SalesLT.usp_remove_cores_duplicadas
+as
+with cte as
+(
+select 
+row_number () OVER(PARTITION BY id ORDER BY id) as rank_cores_duplicadas,
+*
+from [SalesLT].[csvCor]
+
+)
+delete from cte
+where rank_cores_duplicadas > 1
+
+
+create procedure SalesLT.usp_remove_cidades_duplicadas
+as
+with cte as
+(
+select 
+row_number () OVER(PARTITION BY cod_cidade ORDER BY cod_cidade) as rank_cidades_duplicadas,
+*
+from [SalesLT].[cidades]
+)
+delete from cte
+where rank_cidades_duplicadas > 1
+
+https://www.sqlshack.com/overview-of-sql-rank-functions/

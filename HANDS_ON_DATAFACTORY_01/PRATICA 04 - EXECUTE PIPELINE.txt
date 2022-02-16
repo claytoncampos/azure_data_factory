@@ -1,0 +1,22 @@
+PRATICA 04 - EXECUTE PIPELINE
+
+
+1 - AJUSTAR O PIPELINE 02 PARA FILTRAR SOMENTE ARQUIVOS. ADICIONAR O COMPONENTE DE FILTER - OK
+
+2 - CRIAR UM PIPELINE CHAMADO PRATICA_04 PARA REALIZAR OS SEGUINTES PASSOS:
+
+1.1 - COLOCAR 3 ACTIVITIES EXECUTE PIPELINE FAZENDO REFERENCIA AOS PIPELINES PRATICA 01, 02 E 03 - 
+
+2 - VERIFICAR A EXECUÇÃO DO PIPELINE - 
+
+
+
+
+PARAMETROS DO FILTER - pratica_02
+--------------------------------------------------------
+Items = @activity('listar parquet').output.childItems
+Condition = @equals(item().type, 'File')
+
+PARAMETROS DO FOREACH - pratica_02
+-----------------------------------------
+@activity('filtro_arquivos').output.value
